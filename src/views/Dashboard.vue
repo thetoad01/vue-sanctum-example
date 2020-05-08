@@ -1,8 +1,13 @@
 <template>
   <div class="dashboard">
     <h1>Dashboard view</h1>
-    <div>Email: {{ email }}</div>
-    <button @click="logout">Logout</button>
+
+    <div v-if="auth">
+      <div>Email: {{ email }}</div>
+      <button @click="logout">Logout</button>
+    </div>
+
+    <h1 v-else>Please log in!</h1>
   </div>
 </template>
 
@@ -32,21 +37,22 @@ axios.interceptors.response.use((response) => {
 export default {
   data() {
     return {
+      auth: false,
       email: '',
     }
   },
   mounted() {
     axios.get('/api/user')
     .then(response => {
-      console.log('success');
-      console.log(response.data);
-      // this.email = response.data.email;
+      this.auth = true;
+      this.email = response.data.email;
     })
     .catch(error => {
       if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        this.auth = false;
+        // console.log(error.response.data);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
       } else {
         console.log(error);
       }
