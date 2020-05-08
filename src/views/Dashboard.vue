@@ -28,7 +28,7 @@ axios.interceptors.response.use((response) => {
     // Do something with response error
     return Promise.reject(error);
   });
-  
+
 export default {
   data() {
     return {
@@ -38,11 +38,18 @@ export default {
   mounted() {
     axios.get('/api/user')
     .then(response => {
-      console.log(response.status)
+      console.log('success');
+      console.log(response.data);
       // this.email = response.data.email;
     })
     .catch(error => {
-      console.log(error);
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else {
+        console.log(error);
+      }
     });
   },
   methods: {
